@@ -12,10 +12,6 @@ import (
 func diskUsage(currPath string, info os.FileInfo) int64 {
 	size := info.Size()
 
-	if !info.IsDir() {
-		return size
-	}
-
 	dir, err := os.Open(currPath)
 	if err != nil {
 		fmt.Println(err)
@@ -30,7 +26,11 @@ func diskUsage(currPath string, info os.FileInfo) int64 {
 	}
 
 	for _, file := range files {
-		size += diskUsage(fmt.Sprintf("%s/%s", currPath, file.Name()), file)
+		if file.IsDir() {
+			size += diskUsage(fmt.Sprintf("%s/%s", currPath, file.Name()), file)
+		} else {
+			size += file.Size()
+		}
 	}
 
 	if threshold == 0 || size >= threshold {
