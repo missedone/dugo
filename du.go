@@ -35,7 +35,7 @@ func diskUsage(currPath string, info os.FileInfo) int64 {
 
 	if threshold == 0 || size >= threshold {
 		prettyPrintSize(size)
-		fmt.Printf("\t=> [%s%c]\n", currPath, filepath.Separator)
+		fmt.Printf("\t %s%c\n", currPath, filepath.Separator)
 	}
 
 	return size
