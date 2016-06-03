@@ -18,7 +18,25 @@ Usage: dugo [options...] <target_dir>
 Options:
   -h  "Human-readable" output.  Use unit suffixes: Byte, Kilobyte, Megabyte, Gigabyte.
   -t  threshold of the size, any folders' size larger than the threshold will be print. for example, '1G', '10M', '100K', '1024'
+  -d  list its subdirectories and their sizes to any desired level of depth (i.e., to any level of subdirectories) in a directory tree.
 ```
+
+## Example
+
+1. list with max depth as 1 (equivalent to `du -h -d 1 /opt/vagrant`
+```
+dugo -h -d=1 /opt/vagrant
+2.3M	 /opt/vagrant/bin/
+212.1M	 /opt/vagrant/embedded/
+214.4M	 /opt/vagrant/
+```
+2. list and only show the folders larger than threshold
+```
+dugo -h -d=1 -t=100M /opt/vagrant
+212.1M	 /opt/vagrant/embedded/
+214.4M	 /opt/vagrant/
+```
+so in this example, `/opt/vagrant/bin/` was not shown on the output since its size is under the threshold '100M'.
 
 ## Build
 

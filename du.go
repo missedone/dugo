@@ -9,7 +9,7 @@ import (
 	"strconv"
 )
 
-func diskUsage(currPath string, info os.FileInfo) int64 {
+func diskUsage(currPath string, info os.FileInfo, depth int) int64 {
 	var size int64
 
 	dir, err := os.Open(currPath)
@@ -27,15 +27,17 @@ func diskUsage(currPath string, info os.FileInfo) int64 {
 
 	for _, file := range files {
 		if file.IsDir() {
-			size += diskUsage(fmt.Sprintf("%s/%s", currPath, file.Name()), file)
+			size += diskUsage(fmt.Sprintf("%s/%s", currPath, file.Name()), file, depth+1)
 		} else {
 			size += file.Size()
 		}
 	}
 
-	if threshold == 0 || size >= threshold {
-		prettyPrintSize(size)
-		fmt.Printf("\t %s%c\n", currPath, filepath.Separator)
+	if (*maxDepth) <= 0 || (*maxDepth) >= depth {
+		if threshold == 0 || size >= threshold {
+			prettyPrintSize(size)
+			fmt.Printf("\t %s%c\n", currPath, filepath.Separator)
+		}
 	}
 
 	return size
@@ -61,15 +63,16 @@ func prettyPrintSize(size int64) {
 var usage = `Usage: dugo [options...] <target_dir>
 
 Options:
-  -h  "Human-readable" output.  Use unit suffixes: Byte, Kilobyte, Megabyte,
-             Gigabyte.
+  -h  "Human-readable" output.  Use unit suffixes: Byte, Kilobyte, Megabyte, Gigabyte.
   -t  threshold of the size, any folders' size larger than the threshold will be print. for example, '1G', '10M', '100K', '1024'
+  -d  list its subdirectories and their sizes to any desired level of depth (i.e., to any level of subdirectories) in a directory tree.
 `
 
 var (
 	humanReadable = flag.Bool("h", false, "human readable unit of size")
 	thresholdStr  = flag.String("t", "", "the threshold for printing the folder size")
 	threshold     int64
+	maxDepth      = flag.Int("d", 0, "list its subdirectories and their sizes to any desired level of depth (i.e., to any level of subdirectories) in a directory tree.")
 )
 
 func main() {
@@ -116,7 +119,7 @@ func main() {
 		os.Exit(1)
 	}
 
-	diskUsage(dir, info)
+	diskUsage(dir, info, 0)
 }
 
 func usageAndExit(msg string) {
