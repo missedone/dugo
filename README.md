@@ -24,19 +24,19 @@ Options:
 ## Example
 
 1. list with max depth as 1 (equivalent to `du -h -d 1 /opt/vagrant`
-```
-dugo -h -d=1 /opt/vagrant
-2.3M	 /opt/vagrant/bin/
-212.1M	 /opt/vagrant/embedded/
-214.4M	 /opt/vagrant/
-```
+  ```
+  dugo -h -d=1 /opt/vagrant
+  2.3M	 /opt/vagrant/bin/
+  212.1M	 /opt/vagrant/embedded/
+  214.4M	 /opt/vagrant/
+  ```
 2. list and only show the folders larger than threshold
-```
-dugo -h -d=1 -t=100M /opt/vagrant
-212.1M	 /opt/vagrant/embedded/
-214.4M	 /opt/vagrant/
-```
-so in this example, `/opt/vagrant/bin/` was not shown on the output since its size is under the threshold '100M'.
+  ```
+  dugo -h -d=1 -t=100M /opt/vagrant
+  212.1M	 /opt/vagrant/embedded/
+  214.4M	 /opt/vagrant/
+  ```
+  so in this example, `/opt/vagrant/bin/` was not shown on the output since its size is under the threshold '100M'.
 
 ## Build
 
